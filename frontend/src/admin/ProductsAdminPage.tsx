@@ -59,7 +59,8 @@ export default function ProductsAdminPage() {
   const startEdit = (p: AdminProduct) => {
     setEditing(p);
     setFormError(null);
-    setImagesText(p.imageUrls.join("\n"));
+    const images = Array.isArray(p.imageUrls) ? p.imageUrls : [];
+    setImagesText(images.join("\n"));
     setForm({
       slug: p.slug,
       name: p.name,
@@ -67,8 +68,8 @@ export default function ProductsAdminPage() {
       priceCents: p.priceCents,
       stock: p.stock,
       origin: p.origin,
-      imageUrls: p.imageUrls,
-      categorySlug: p.categorySlug,
+      imageUrls: images,
+      categorySlug: p.categorySlug ?? "",
     });
   };
 

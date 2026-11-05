@@ -46,7 +46,6 @@ export interface AdminProduct {
   imageUrls: string[];
   categoryName: string;
   categorySlug: string;
-  available: boolean;
 }
 
 export interface AdminOrder {

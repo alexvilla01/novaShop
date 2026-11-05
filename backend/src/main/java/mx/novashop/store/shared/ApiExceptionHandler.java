@@ -17,6 +17,9 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
+    private static final org.slf4j.Logger LOGGER =
+        org.slf4j.LoggerFactory.getLogger(ApiExceptionHandler.class);
+
     private static final String NOT_FOUND_MENSAJE =
         "El recurso que buscas no existe o ya no está disponible.";
     private static final String SERVICIO_INDISPONIBLE =
@@ -62,6 +65,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> internal(Exception ex) {
+        LOGGER.error("Error interno en {}", ex.getMessage(), ex);
         return body(HttpStatus.INTERNAL_SERVER_ERROR, "Error interno", SERVICIO_INDISPONIBLE);
     }
 

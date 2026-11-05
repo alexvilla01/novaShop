@@ -102,7 +102,8 @@ class AdminContractTest {
     void productsWithSession() throws Exception {
         when(catalogService.listAll(anyInt(), anyInt()))
             .thenReturn(List.of(new AdminCatalogService.AdminProductSummary(
-                1L, "sku-demo", "Producto Demo", 12900L, null, 5, "PROPIO", true)));
+                1L, "sku-demo", "Producto Demo", 12900L, "Descripción demo", java.util.List.of(),
+                5, "PROPIO", true, "electronica", "Electrónica")));
 
         mockMvc.perform(get("/api/admin/products").cookie(sesion()))
             .andExpect(status().isOk())

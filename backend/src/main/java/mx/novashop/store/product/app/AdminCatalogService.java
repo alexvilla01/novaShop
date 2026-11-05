@@ -39,10 +39,13 @@ public class AdminCatalogService {
         String slug,
         String name,
         Long priceCents,
-        String imageUrl,
+        String description,
+        List<String> imageUrls,
         Integer stock,
         String origin,
-        boolean isActive
+        boolean isActive,
+        String categorySlug,
+        String categoryName
     ) {
     }
 
@@ -62,11 +65,12 @@ public class AdminCatalogService {
             .getContent().stream()
             .map(p -> new AdminProductSummary(
                 p.getId(), p.getSlug(), p.getName(), p.getPriceCents().longValue(),
-                (p.getImageUrls() == null || p.getImageUrls().isEmpty())
-                    ? null : p.getImageUrls().get(0),
+                p.getDescription() == null ? "" : p.getDescription(),
+                p.getImageUrls() == null ? List.of() : List.copyOf(p.getImageUrls()),
                 p.getStock(),
                 p.getOrigin() == null ? ProductOrigin.PROPIO.name() : p.getOrigin().name(),
-                p.getIsActive() != null && p.getIsActive()))
+                p.getIsActive() != null && p.getIsActive(),                p.getCategory() == null ? "" : p.getCategory().getSlug(),
+                p.getCategory() == null ? "" : p.getCategory().getName()))
             .toList();
     }
 
