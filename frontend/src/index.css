@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@import "./styles/theme.css";
+
+:root {
+  --color-bg: #fafafa;
+  --color-fg: #17171c;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-fg);
+}

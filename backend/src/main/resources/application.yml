@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: novaShop
+  datasource:
+    url: ${NS_DB_URL:jdbc:postgresql://localhost:5432/novashop}
+    username: ${NS_DB_USER:novashop}
+    password: ${NS_DB_PASSWORD:novashop}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: ${NS_FLYWAY_LOCATIONS:classpath:db/migration,classpath:db/demo}
+  threads:
+    virtual:
+      enabled: true
+
+novashop:
+  wa-phone: ${NS_WA_PHONE:5215500000000}
+  public-url: ${NS_PUBLIC_URL:http://localhost:5173}
+  cors-origins: ${NS_CORS_ORIGINS:http://localhost:5173}
+  admin-user: ${NS_ADMIN_USER:admin}
+  admin-password-hash: ${NS_ADMIN_PASSWORD_HASH:}
+  admin-secret: ${NS_ADMIN_SECRET:change-me-in-256-bit-hex}
+  demo-seed: ${NS_DEMO_SEED:true}
+  sms-wa-confirm: false
+
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
