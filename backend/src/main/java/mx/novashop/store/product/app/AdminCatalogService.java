@@ -118,6 +118,10 @@ public class AdminCatalogService {
         ProductEntity existing = productRepository.findWithDetailById(id)
             .orElseThrow(() -> new ResourceNotFoundException(NO_EXISTE));
         ProductEntity refreshed = validateAndBuild(r);
+        if (productRepository.existsBySlugIgnoreCaseAndIdNot(
+            refreshed.getSlug(), id)) {
+            throw new ProductUnavailableException("Ya existe un producto con ese slug.");
+        }
         existing.setSlug(refreshed.getSlug());
         existing.setName(refreshed.getName());
         existing.setDescription(refreshed.getDescription());

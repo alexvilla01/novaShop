@@ -31,12 +31,19 @@ public class NovaConfig {
     @Value("${novashop.admin-secret:}")
     private String adminSecret;
 
+    @Value("${novashop.session-cookie-secure:true}")
+    private boolean sessionCookieSecure;
+
     public String waPhone() {
         return waPhone;
     }
 
     public String publicUrl() {
         return publicUrl;
+    }
+
+    public boolean sessionCookieSecure() {
+        return sessionCookieSecure;
     }
 
     @Bean
@@ -50,6 +57,16 @@ public class NovaConfig {
             new FilterRegistrationBean<>(new AdminSessionFilter(sessionService));
         registration.addUrlPatterns("/api/admin/*");
         registration.setOrder(1);
+        return registration;
+    }
+
+    @Bean
+    FilterRegistrationBean<SecurityHeadersFilter> securityHeadersFilter() {
+        FilterRegistrationBean<SecurityHeadersFilter> registration =
+            new FilterRegistrationBean<>(new SecurityHeadersFilter(
+                publicUrl != null && publicUrl.startsWith("https://")));
+        registration.addUrlPatterns("/api/*");
+        registration.setOrder(0);
         return registration;
     }
 

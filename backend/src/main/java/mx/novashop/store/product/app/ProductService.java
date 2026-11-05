@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /** Catálogo público: solo productos activos, sumarios con `available` derivado del stock. */
+@Service
 public class ProductService {
 
     public static final String NO_ENCONTRADO =

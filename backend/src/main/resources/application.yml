@@ -24,6 +24,7 @@ novashop:
   admin-password-hash: ${NS_ADMIN_PASSWORD_HASH:}
   admin-secret: ${NS_ADMIN_SECRET:change-me-in-256-bit-hex}
   demo-seed: ${NS_DEMO_SEED:true}
+  session-cookie-secure: ${NS_SESSION_COOKIE_SECURE:true}
   sms-wa-confirm: false
 
 server:

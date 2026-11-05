@@ -14,6 +14,8 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     boolean existsBySlugIgnoreCase(String slug);
 
+    boolean existsBySlugIgnoreCaseAndIdNot(String slug, Long id);
+
     @EntityGraph(attributePaths = "category")
     Page<ProductEntity> findAllByIsActiveTrue(Pageable pageable);
 

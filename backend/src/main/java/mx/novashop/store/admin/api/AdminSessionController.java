@@ -23,9 +23,14 @@ import jakarta.servlet.http.HttpServletResponse;
 public class AdminSessionController {
 
     private final AdminSessionService sessionService;
+    private final boolean secureCookie;
 
-    public AdminSessionController(AdminSessionService sessionService) {
+    public AdminSessionController(
+        AdminSessionService sessionService,
+        @org.springframework.beans.factory.annotation.Value("${novashop.session-cookie-secure:true}") boolean secureCookie
+    ) {
         this.sessionService = sessionService;
+        this.secureCookie = secureCookie;
     }
 
     public record LoginRequest(String username, String password) {
@@ -42,7 +47,7 @@ public class AdminSessionController {
         var session = sessionService.login(request.username(), request.password());
         Cookie cookie = new Cookie(AdminSessionService.COOKIE_NAME, session.cookieValue());
         cookie.setHttpOnly(true);
-        cookie.setSecure(true);
+        cookie.setSecure(secureCookie);
         cookie.setAttribute("SameSite", "Lax");
         cookie.setPath("/");
         cookie.setMaxAge((int) Duration.ofHours(12).toSeconds());

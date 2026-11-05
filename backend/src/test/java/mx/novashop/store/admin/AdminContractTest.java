@@ -56,7 +56,7 @@ class AdminContractTest {
 
         mockMvc = MockMvcBuilders
             .standaloneSetup(
-                new AdminSessionController(sessionService),
+                new AdminSessionController(sessionService, false),
                 new AdminProductController(catalogService),
                 new AdminOrderController(orderQueryService))
             .addFilters(new AdminSessionFilter(sessionService))

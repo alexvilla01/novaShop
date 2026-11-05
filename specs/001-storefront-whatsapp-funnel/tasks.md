@@ -129,8 +129,8 @@ description: "Task list for MVP Storefront con Embudo de WhatsApp"
 **Purpose**: mejoras transversales y cierre de validación
 
 - [x] T035 [P] Actualizar README raíz (stack, comandos de quickstart.md resumidos, estructura del monorepo)
-- [ ] T036 [P] Security hardening: revisar headers de respuesta, alcance CORS, cookies de sesión, constants de mensajes sin leaks (skill security-review)
-- [ ] T037 Performance check: Lighthouse móvil landing ≥ 85 (SC-003), lazy a imágenes si hace falta, bundle < 200KB gzip en cambio virtual
+- [x] T036 [P] Security hardening: revisar headers de respuesta, alcance CORS, cookies de sesión, constants de mensajes sin leaks (skill security-review)
+- [x] T037 Performance check: Lighthouse móvil landing ≥ 85 (SC-003), lazy a imágenes si hace falta, bundle < 200KB gzip en cambio virtual
 - [x] T038 Ejecutar validación completa manual de quickstart.md (3 escenarios) + suites automatizadas (`./mvnw test`, `npm run test`, `npx playwright test`)
 
 ---

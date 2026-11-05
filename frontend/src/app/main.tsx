@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "../index.css";
@@ -8,10 +8,11 @@ import HomePage from "../pages/HomePage";
 import LandingPage from "../pages/LandingPage";
 import CategoryPage from "../pages/CategoryPage";
 import NotFoundPage from "../pages/NotFoundPage";
-import AdminLayout from "../admin/AdminLayout";
-import LoginPage from "../admin/LoginPage";
-import ProductsAdminPage from "../admin/ProductsAdminPage";
-import OrdersAdminPage from "../admin/OrdersAdminPage";
+
+const AdminLayout = lazy(() => import("../admin/AdminLayout"));
+const LoginPage = lazy(() => import("../admin/LoginPage"));
+const ProductsAdminPage = lazy(() => import("../admin/ProductsAdminPage"));
+const OrdersAdminPage = lazy(() => import("../admin/OrdersAdminPage"));
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -24,11 +25,27 @@ createRoot(document.getElementById("root")!).render(
             <Route path="/p/:slug" element={<LandingPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
-          <Route path="/admin/login" element={<LoginPage />} />
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<ProductsAdminPage />} />
-            <Route path="ordenes" element={<OrdersAdminPage />} />
-          </Route>
+          <Route
+            path="/admin/login"
+            element={
+              <Suspense fallback={null}>
+                <LoginPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/admin/*"
+            element={
+              <Suspense fallback={null}>
+                <AdminLayout>
+                  <Routes>
+                    <Route index element={<ProductsAdminPage />} />
+                    <Route path="ordenes" element={<OrdersAdminPage />} />
+                  </Routes>
+                </AdminLayout>
+              </Suspense>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </ErrorBoundary>
