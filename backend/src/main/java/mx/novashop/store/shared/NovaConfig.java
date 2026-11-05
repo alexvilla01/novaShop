@@ -34,6 +34,12 @@ public class NovaConfig {
     @Value("${novashop.session-cookie-secure:true}")
     private boolean sessionCookieSecure;
 
+    @Value("${novashop.orders-ratelimit-per-window:5}")
+    private int ordersRateLimitPerWindow;
+
+    @Value("${novashop.orders-ratelimit-window-seconds:60}")
+    private int ordersRateLimitWindowSeconds;
+
     public String waPhone() {
         return waPhone;
     }
@@ -67,6 +73,16 @@ public class NovaConfig {
                 publicUrl != null && publicUrl.startsWith("https://")));
         registration.addUrlPatterns("/api/*");
         registration.setOrder(0);
+        return registration;
+    }
+
+    @Bean
+    FilterRegistrationBean<mx.novashop.store.order.OrderRateLimitFilter> orderRateLimitFilter() {
+        FilterRegistrationBean<mx.novashop.store.order.OrderRateLimitFilter> registration =
+            new FilterRegistrationBean<>(new mx.novashop.store.order.OrderRateLimitFilter(
+                ordersRateLimitPerWindow, ordersRateLimitWindowSeconds));
+        registration.addUrlPatterns("/api/orders");
+        registration.setOrder(2);
         return registration;
     }
 
