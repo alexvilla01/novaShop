@@ -1,0 +1,24 @@
+# novaShop — estado del proyecto
+
+## Stack
+Monorepo: `frontend` (React 19 + Vite 8 + Tailwind v4) y `backend` (Spring Boot 4.1.2 + PostgreSQL 18). Fundamentales:
+- JDK: `export JAVA_HOME=~/.local/opt/jdk-21` antes de `./mvnw`.
+- Tests backend (MockMvc standalone): clases/paquetes necesitan `public`; MVC lneces pasan.
+- PostgreSQL local: `pg_ctl -D ~/.local/opt/pg/bin start` (user/db `novashop`/`novashop`).
+- Env demo backend: `/tmp/opencode/env.novashop` (borra por WSL restart; password admin `nova-admin-2026` bcrypt).
+- Frontend dev: `npm run dev -- --port 5173 --strictPort` (desde Windows npm; proxy /api → 8080 con Playwright).
+- E2E mocked: `frontend/tests/e2e/{buy,admin}.spec.ts`; **e2e real (backend+Postgres)**: `frontend/tests/e2e/admin-real.spec.ts`.
+- Cada test Vitest necesita `import "@testing-library/jest-dom/vitest"`; tsconfig.app types `["vite/client","vitest/globals"]`.
+- Sitemap placeholder `https://store.novashop.mx` (pendiente dominio real).
+
+## Estado del MVP
+- tasks.md 38/38 + rate-limit en POST /api/orders.
+- CI verde (`alexvilla01/novaShop`, rama `main`).
+
+## Deploy (pendiente de VPS + dominio)
+- `deploy/docker-compose.yml` (postgres + backend + caddy web auto-HTTPS), Dockerfiles en backend/frontend, `deploy/.env.example`, `deploy/README.md` (pasos 1-6: provisión VPS, .env, DNS A, origen arranque, SSH secrets en gh, rollback).
+- `.github/workflows/deploy.yml` en `workflow_dispatch`; activar `push:[main]` cuando exista VPS + secrets SSH_*/PROJECT_DIR.
+
+## Última sesión (6 nov 2026)
+- E2E admin real implementado y corregidos tres bugs (summary admin expone imageUrls/description/categoría, copia lazy List.copyOf, logger en catch-all 500).
+- Suites: backend 20/20, Playwright 6/6. Commit `982cbef` CI verde.

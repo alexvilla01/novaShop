@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-novashop}
+      POSTGRES_USER: ${POSTGRES_USER:-novashop}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD requerido}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-novashop} -d ${POSTGRES_DB:-novashop}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ../backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-novashop}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-novashop}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      NS_ADMIN_USER: ${NS_ADMIN_USER:-admin}
+      NS_ADMIN_PASSWORD_HASH: ${NS_ADMIN_PASSWORD_HASH:?NS_ADMIN_PASSWORD_HASH requerido}
+      NS_ADMIN_SECRET: ${NS_ADMIN_SECRET:?NS_ADMIN_SECRET requerido}
+      NS_WA_PHONE: ${NS_WA_PHONE:?NS_WA_PHONE requerido}
+      NS_SESSION_COOKIE_SECURE: "true"
+
+  web:
+    build: ../frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:
