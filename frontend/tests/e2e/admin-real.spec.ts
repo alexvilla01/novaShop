@@ -22,7 +22,7 @@ test.describe("US3 - panel admin con backend real", () => {
     // 2. Crear producto nuevo desde el formulario
     await page.getByLabel(/slug/i).fill(slug);
     await page.getByLabel(/^nombre$/i).fill(name);
-    await page.getByLabel(/categoría/i).selectOption({ label: "Electrónica" });
+    await page.getByLabel(/^categoría/i).selectOption({ label: "Electrónica" });
     await page.getByLabel(/precio/i).fill("12900");
     await page.getByLabel(/stock/i).fill("7");
     await page.getByLabel(/descripción/i).fill("Producto creado por E2E con backend real.");

@@ -28,6 +28,8 @@ export default function ProductsAdminPage() {
   const [form, setForm] = useState<ProductMutationPayload>(EMPTY_FORM);
   const [formError, setFormError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [query, setQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
   const [imagesText, setImagesText] = useState("");
 
   const validate = (payload: ProductMutationPayload): string | null => {
@@ -108,7 +110,10 @@ export default function ProductsAdminPage() {
     }
   };
 
-  const deactivate = async (id: number) => {
+  const deactivate = async (id: number, name: string) => {
+    if (!window.confirm(`¿Desactivar "${name}"? Dejará de mostrarse en el catálogo.`)) {
+      return;
+    }
     setBusy(true);
     try {
       await apiClient.delete(`/api/admin/products/${id}`);
@@ -118,10 +123,23 @@ export default function ProductsAdminPage() {
     }
   };
 
+  const normalizedQuery = query.trim().toLowerCase();
+  const visibleProducts = products.filter((p) => {
+    const matchesQuery =
+      !normalizedQuery ||
+      `${p.name} ${p.slug}`.toLowerCase().includes(normalizedQuery);
+    const matchesCategory = !categoryFilter || p.categorySlug === categoryFilter;
+    return matchesQuery && matchesCategory;
+  });
+  const hasFilters = query.trim() !== "" || categoryFilter !== "";
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">Productos ({products.length})</h1>
+        <h1 className="text-xl font-bold">
+          Productos ({visibleProducts.length}
+          {visibleProducts.length !== products.length && ` de ${products.length}`})
+        </h1>
         <button
           type="button"
           onClick={startCreate}
@@ -129,6 +147,42 @@ export default function ProductsAdminPage() {
         >
           + Nuevo producto
         </button>
+      </div>
+
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Buscar por nombre o slug…"
+          aria-label="Buscar productos"
+          className="w-full rounded-full bg-nova-surface px-4 py-2 text-sm ring-1 ring-black/10 focus:outline focus:outline-2 focus:outline-offset-1 outline-nova-primary sm:max-w-xs"
+        />
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+          aria-label="Filtrar por categoría"
+          className="rounded-full bg-nova-surface px-4 py-2 text-sm ring-1 ring-black/10"
+        >
+          <option value="">Todas las categorías</option>
+          {categories.map((c) => (
+            <option key={c.slug} value={c.slug}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+        {hasFilters && (
+          <button
+            type="button"
+            onClick={() => {
+              setQuery("");
+              setCategoryFilter("");
+            }}
+            className="text-sm text-nova-primary hover:underline"
+          >
+            Limpiar filtros
+          </button>
+        )}
       </div>
 
       {error && <p className="rounded-xl bg-red-50 px-4 py-3 text-red-700">{error}</p>}
@@ -146,7 +200,14 @@ export default function ProductsAdminPage() {
             </tr>
           </thead>
           <tbody>
-            {products.map((p) => (
+            {visibleProducts.length === 0 && (
+              <tr>
+                <td colSpan={6} className="px-4 py-8 text-center text-nova-ink-muted">
+                  No hay productos que coincidan con los filtros.
+                </td>
+              </tr>
+            )}
+            {visibleProducts.map((p) => (
               <tr key={p.id} className="border-b border-black/5 last:border-0">
                 <td className="px-4 py-3">
                   <p className="font-medium">{p.name}</p>
@@ -177,7 +238,7 @@ export default function ProductsAdminPage() {
                       <button
                         type="button"
                         disabled={busy}
-                        onClick={() => deactivate(p.id)}
+                        onClick={() => deactivate(p.id, p.name)}
                         className="rounded-full px-3 py-1 text-xs text-red-700 ring-1 ring-red-200 hover:bg-red-50"
                       >
                         Desactivar
