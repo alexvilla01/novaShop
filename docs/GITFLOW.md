@@ -34,28 +34,29 @@ Reglas:
 ## Fases
 
 ### Fase 0 — Respaldo del estado actual
-- [ ] `git fetch origin && git pull --ff-only`
-- [ ] Crear tag anotado del estado actual (`v0.1.0-pre-gitflow`) y subirlo.
-- [ ] Verificar working tree limpio.
+- [x] `git fetch origin && git pull --ff-only`
+- [x] Crear tag anotado del estado actual (`v0.1.0-pre-gitflow`) y subirlo.
+- [x] Verificar working tree limpio.
 
 ### Fase 1 — Crear `develop` y publicarla
-- [ ] `git switch -c develop main`
-- [ ] `git push -u origin develop`
-- [ ] `gh repo edit --default-branch develop` (nuevas PRs y clones parten de integración).
+- [x] `git switch -c develop main`
+- [x] `git push -u origin develop`
+- [x] `gh repo edit --default-branch develop` (nuevas PRs y clones parten de integración).
 
 ### Fase 2 — Ajustar CI
-- [ ] `ci.yml`: `push.branches: [main, develop]` y `pull_request.branches: [main, develop]`.
-- [ ] Mantener jobs backend + frontend; sin cambios de lógica.
-- [ ] Verificar run verde en `develop`.
+- [x] `ci.yml`: `push.branches: [main, develop]` y `pull_request.branches: [main, develop]`.
+- [x] Mantener jobs backend + frontend; sin cambios de lógica.
+- [x] Verificar run verde en `develop` (run 42506151949).
 
 ### Fase 3 — Protección y ajustes de repo en GitHub
-- [ ] Activar `delete_branch_on_merge`.
-- [ ] Proteger `main`: requerir PR, CI (backend + frontend) en verde, rama al día, sin force push ni borrado. Admin puede mergear (mantenedor único).
-- [ ] Proteger `develop`: prohibir force push y borrado; CI requerida (PR opcional según decisión).
-- [ ] Revisar merge methods: habilitar squash; decidir si se permite merge commit (recomendado para `release/* → main`).
+- [x] Activar `delete_branch_on_merge`.
+- [x] Proteger `main`: PR + CI (backend + frontend), rama al día, sin force push ni borrado, bypass de admin deshabilitado.
+- [x] Proteger `develop`: PR + CI, rama al día, sin force push ni borrado, bypass de admin permitido para emergencias.
+- [x] Merge methods: squash y merge commit habilitados; rebase deshabilitado.
 
 ### Fase 4 — Flujo de trabajo diario
-- [ ] Feature: `git switch develop && git pull` → `git switch -c feature/<scope>` → commits → push → PR a `develop` → CI → squash merge.
+- [x] Bootstrap: `develop` se creó con un commit directo de CI antes de activar la protección; desde entonces todo entra por PR (PR #1 validó el flujo).
+- [x] Feature: `git switch develop && git pull` → `git switch -c feature/<scope>` → commits → push → PR a `develop` → CI → squash merge.
 - [ ] Release: `release/x.y.z` desde `develop` → estabilizar → PR a `main` → tag `vX.Y.Z` → back-merge a `develop`.
 - [ ] Hotfix: `hotfix/x.y.z` desde `main` → PR a `main` → tag → back-merge a `develop`.
 
@@ -65,10 +66,10 @@ Reglas:
 - [ ] Rollback documentado por tag (`git reset --hard vX.Y.Z` en el VPS y redeploy).
 
 ### Fase 6 — Verificación
-- [ ] Direct push a `main` rechazado por protección.
-- [ ] PR `feature/* → develop` corre CI y mergea.
-- [ ] PR `develop → main` corre CI.
-- [ ] `gh run list` muestra CI en `develop` y `main`.
+- [x] PR `fix/* → develop` corre CI y mergea con squash (PR #1).
+- [x] CI corre en `develop` y `main`.
+- [x] Protecciones verificadas vía API (checks, strict, force push y borrado deshabilitados).
+- [ ] Probar PR `release/* → main` y tag `v*` cuando exista el VPS (el deploy se omite con aviso si faltan secrets).
 
 ## Comandos base
 
