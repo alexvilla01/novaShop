@@ -1,5 +1,11 @@
 # novaShop — estado del proyecto
 
+## Flujo Git (GitFlow)
+- `develop` (default): integración, PR obligatoria + CI.
+- `feature/*`/`fix/*` → PR a `develop`; `release/*` y `hotfix/*` → PR a `main` + tag `vX.Y.Z`.
+- `main` protegida (PR + CI, sin bypass admin); deploy automático al empujar tag `v*` (se omite si faltan secrets SSH).
+- Plan completo: `docs/GITFLOW.md`.
+
 ## Stack
 Monorepo: `frontend` (React 19 + Vite 8 + Tailwind v4) y `backend` (Spring Boot 4.1.2 + PostgreSQL 18). Fundamentales:
 - JDK: `export JAVA_HOME=~/.local/opt/jdk-21` antes de `./mvnw`.
