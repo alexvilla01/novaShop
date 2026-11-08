@@ -16,7 +16,8 @@ jobs:
     steps:
       - name: Deploy omitido (falta VPS o secrets)
         if: env.HAS_SSH != 'true'
-        run: echo "::notice::Deploy omitido: configura SSH_HOST/SSH_USER/SSH_KEY/PROJECT_DIR y el VPS."
+        run: |
+          echo "::notice::Deploy omitido: configura SSH_HOST/SSH_USER/SSH_KEY/PROJECT_DIR y el VPS."
 
       - name: Deploy por SSH (git reset + rebuild)
         if: env.HAS_SSH == 'true'
