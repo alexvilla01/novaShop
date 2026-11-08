@@ -1,18 +1,81 @@
 @theme {
+  /* Cosmic Slate — dark de alta gama */
+  --color-nova-bg: #0b0f19;
+  --color-nova-bg-soft: #0f172a;
+  --color-nova-surface: rgba(15, 23, 42, 0.75);
+  --color-nova-ink: #f1f5f9;
+  --color-nova-ink-muted: #94a3b8;
+
+  /* Acentos */
+  --color-nova-primary: #ff9e19;
+  --color-nova-primary-strong: #ff7a00;
+  --color-nova-coral: #ff3366;
+  --color-nova-aurora: #19c1ff;
+  --color-nova-teal: #00d2e3;
+  --color-nova-positive: #22c55e;
+  --color-nova-wa: #25d366;
+
+  --radius-nova: 1rem;
+
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+}
+
+/* Tema claro para el panel de administración */
+.theme-light {
   --color-nova-bg: #fafafa;
+  --color-nova-bg-soft: #f1f5f9;
   --color-nova-surface: #ffffff;
   --color-nova-ink: #17171c;
   --color-nova-ink-muted: #6b7280;
   --color-nova-primary: #4f46e5;
   --color-nova-primary-strong: #4338ca;
+  --color-nova-coral: #dc2626;
+  --color-nova-aurora: #0ea5e9;
+  --color-nova-teal: #0d9488;
   --color-nova-positive: #059669;
-  --color-nova-wa: #25d366;
+}
 
-  --radius-nova: 1rem;
-
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
 }
 
 .brand-gradient {
-  background: linear-gradient(135deg, #eef2ff 0%, #fafafa 60%, #e0e7ff 100%);
+  background:
+    radial-gradient(1200px 500px at 15% -10%, rgba(255, 158, 25, 0.18), transparent 60%),
+    radial-gradient(900px 400px at 90% 0%, rgba(25, 193, 255, 0.16), transparent 55%),
+    #0b0f19;
+}
+
+.glass-panel {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-strong {
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.text-gradient-hot {
+  background: linear-gradient(90deg, #ff9e19 0%, #ff3366 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }

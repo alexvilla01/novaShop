@@ -24,7 +24,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-nova-bg px-4">
+    <div className="theme-light flex min-h-screen items-center justify-center bg-nova-bg px-4 text-nova-ink">
       <form
         onSubmit={submit}
         className="w-full max-w-sm rounded-2xl bg-nova-surface p-6 shadow-lg ring-1 ring-black/5"

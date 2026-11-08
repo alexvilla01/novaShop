@@ -26,14 +26,14 @@ export default function AdminLayout({ children }: Props) {
 
   if (!checked) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-nova-bg text-nova-ink-muted">
+      <div className="theme-light flex min-h-screen items-center justify-center bg-nova-bg text-nova-ink-muted">
         Cargando panel…
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-nova-bg text-nova-ink">
+    <div className="theme-light min-h-screen bg-nova-bg text-nova-ink">
       <header className="border-b border-black/5 bg-nova-surface">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
           <div className="flex items-center gap-4 text-sm">

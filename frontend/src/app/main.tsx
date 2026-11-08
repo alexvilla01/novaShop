@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "../index.css";
 import PublicLayout from "./PublicLayout";
+import ProductLayout from "./ProductLayout";
 import ErrorBoundary from "../components/ErrorBoundary";
 import HomePage from "../pages/HomePage";
 import LandingPage from "../pages/LandingPage";
@@ -22,8 +23,10 @@ createRoot(document.getElementById("root")!).render(
           <Route element={<PublicLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/c/:slug" element={<CategoryPage />} />
-            <Route path="/p/:slug" element={<LandingPage />} />
             <Route path="*" element={<NotFoundPage />} />
+          </Route>
+          <Route element={<ProductLayout />}>
+            <Route path="/p/:slug" element={<LandingPage />} />
           </Route>
           <Route
             path="/admin/login"

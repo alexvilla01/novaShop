@@ -1,30 +1,27 @@
 import { useEffect, useState } from "react";
-import CategoryChips from "../components/CategoryChips";
+import { Link, useSearchParams } from "react-router-dom";
+import FlashBanner from "../components/FlashBanner";
 import ProductCard from "../components/ProductCard";
 import { apiClient } from "../lib/apiClient";
-import type { CategoryDto, ProductSummary } from "../lib/types";
+import type { ProductSummary } from "../lib/types";
 
 export default function HomePage() {
   const [products, setProducts] = useState<ProductSummary[]>([]);
-  const [categories, setCategories] = useState<CategoryDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [params] = useSearchParams();
+  const query = (params.get("q") ?? "").trim();
 
   useEffect(() => {
-    document.title = "novaShop · Catálogo";
-  }, []);
+    document.title = query ? `Buscar: ${query} · novaShop` : "novaShop · Catálogo";
+  }, [query]);
 
   useEffect(() => {
     let active = true;
-    Promise.all([
-      apiClient.get<{ content: ProductSummary[] }>("/api/products"),
-      apiClient.get<CategoryDto[]>("/api/categories"),
-    ])
-      .then(([page, cats]) => {
-        if (active) {
-          setProducts(page.content);
-          setCategories(cats);
-        }
+    apiClient
+      .get<{ content: ProductSummary[] }>("/api/products")
+      .then((page) => {
+        if (active) setProducts(page.content);
       })
       .catch((err: Error) => {
         if (active) setError(err.message);
@@ -37,39 +34,54 @@ export default function HomePage() {
     };
   }, []);
 
-  return (
-    <section className="mx-auto max-w-6xl px-4 py-8">
-      <div className="mb-6 flex flex-col gap-4 rounded-3xl brand-gradient p-6 ring-1 ring-black/5 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            Compra directo, sin vueltas
-          </h1>
-          <p className="mt-1 max-w-xl text-sm text-nova-ink-muted sm:text-base">
-            Elige tu producto y confirma por WhatsApp con el vendedor. Sin carritos,
-            sin cuentas y sin comisiones.
-          </p>
-        </div>
-        <img
-          src="/logonovaShop.jpg"
-          alt=""
-          aria-hidden="true"
-          className="hidden h-20 w-20 rounded-2xl object-cover ring-2 ring-white/70 sm:block"
-        />
-      </div>
+  const normalized = query.toLowerCase();
+  const visible = normalized
+    ? products.filter((p) =>
+        `${p.name} ${p.categoryName}`.toLowerCase().includes(normalized),
+      )
+    : products;
 
-      <CategoryChips categories={categories} />
+  return (
+    <section className="mx-auto max-w-6xl px-4 py-4 sm:py-6">
+      <h1 className="sr-only">Catálogo novaShop</h1>
+      <FlashBanner />
+
+      {query && (
+        <div className="mt-4 flex items-center justify-between gap-3">
+          <p className="text-sm text-nova-ink-muted">
+            Resultados para <span className="font-semibold text-nova-ink">“{query}”</span> ({visible.length})
+          </p>
+          <Link to="/" className="text-sm text-nova-aurora hover:underline">
+            Limpiar búsqueda
+          </Link>
+        </div>
+      )}
 
       {loading ? (
-        <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="aspect-[4/3] animate-pulse rounded-2xl bg-black/5" />
+            <div key={i} className="aspect-[4/5] animate-pulse rounded-2xl bg-white/5" />
           ))}
         </div>
       ) : error ? (
-        <p className="mt-6 rounded-2xl bg-red-50 px-6 py-10 text-center text-red-700">{error}</p>
+        <p className="mt-5 rounded-2xl border border-nova-coral/30 bg-nova-coral/10 px-6 py-10 text-center text-nova-coral">
+          {error}
+        </p>
+      ) : visible.length === 0 ? (
+        <div className="glass-panel mt-5 flex flex-col items-center gap-3 rounded-2xl px-6 py-16 text-center">
+          <p className="text-4xl" aria-hidden="true">🔍</p>
+          <p className="text-nova-ink-muted">
+            {query ? "Sin resultados para tu búsqueda." : "Vuelve pronto, habrá novedades."}
+          </p>
+          {query && (
+            <Link to="/" className="text-sm font-semibold text-nova-aurora hover:underline">
+              Ver todo el catálogo
+            </Link>
+          )}
+        </div>
       ) : (
-        <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {products.map((p) => (
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          {visible.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
         </div>

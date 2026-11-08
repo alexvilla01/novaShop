@@ -38,7 +38,7 @@ test.describe("US1 - compra directa por WhatsApp", () => {
 
     await page.goto("/p/auriculares-pro-x");
     await expect(page.getByRole("heading", { name: "Auriculares Pro X" })).toBeVisible();
-    await expect(page.getByText("$2,499.00")).toBeVisible();
+    await expect(page.getByText("$2,499.00").first()).toBeVisible();
 
     await page.getByRole("button", { name: /Comprar/i }).click();
 

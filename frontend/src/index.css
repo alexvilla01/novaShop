@@ -2,12 +2,13 @@
 @import "./styles/theme.css";
 
 :root {
-  --color-bg: #fafafa;
-  --color-fg: #17171c;
+  --color-bg: #0b0f19;
+  --color-fg: #f1f5f9;
 }
 
 body {
   margin: 0;
   background: var(--color-bg);
   color: var(--color-fg);
+  font-family: var(--font-sans);
 }

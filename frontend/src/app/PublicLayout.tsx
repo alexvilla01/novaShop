@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import SiteHeader from "../components/SiteHeader";
 
 interface Props {
   children?: ReactNode;
@@ -7,32 +8,21 @@ interface Props {
 
 export default function PublicLayout({ children }: Props) {
   return (
-    <div className="flex min-h-screen flex-col bg-nova-bg text-nova-ink antialiased">
-      <header className="sticky top-0 z-30 border-b border-black/5 bg-nova-surface/90 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-          <Link to="/" className="flex items-center gap-2.5">
-            <img
-              src="/logonovaShop.jpg"
-              alt="novaShop"
-              width={40}
-              height={40}
-              className="h-10 w-10 rounded-full object-cover ring-2 ring-nova-primary/15"
-            />
-            <span className="text-lg font-bold tracking-tight">
-              nova<span className="text-nova-primary">Shop</span>
-            </span>
-          </Link>
-          <nav aria-label="principal" className="text-sm">
-            <Link to="/" className="rounded-full px-3 py-2 hover:bg-black/5">
-              Catálogo
-            </Link>
-          </nav>
-        </div>
-      </header>
+    <div className="brand-gradient flex min-h-screen flex-col text-nova-ink antialiased">
+      <SiteHeader />
       <main className="flex-1">{children ?? <Outlet />}</main>
-      <footer className="border-t border-black/5 bg-nova-surface">
-        <div className="mx-auto max-w-6xl px-4 py-6 text-center text-xs text-nova-ink-muted">
-          © {new Date().getFullYear()} novaShop · Venta directa por WhatsApp
+      <footer className="border-t border-white/5 bg-[#080b12]">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 py-8 text-center text-xs text-nova-ink-muted">
+          <p>
+            © {new Date().getFullYear()} novaShop · Venta directa por WhatsApp
+          </p>
+          <p className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+            <span>Pago contra entrega</span>
+            <span aria-hidden="true">·</span>
+            <span>Envío seguro</span>
+            <span aria-hidden="true">·</span>
+            <span>Atención 24/7</span>
+          </p>
         </div>
       </footer>
     </div>
