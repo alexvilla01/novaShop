@@ -26,3 +26,15 @@ npm-debug.log*
 frontend/test-results
 frontend/playwright-report
 frontend/screenshots
+
+# opencode runtime (migrado a Claude Code; solo node_modules y skills sin trackear)
+.opencode/node_modules/
+.opencode/skills/
+.opencode/plugins/
+
+# graphify: ignorar archivos intermedios; graph.json y GRAPH_REPORT.md se pueden commitear
+graphify-out/.graphify_*.json
+graphify-out/.graphify_*.txt
+graphify-out/.graphify_python
+graphify-out/.graphify_root
+graphify-out/.needs_update
